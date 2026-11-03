@@ -19,7 +19,17 @@ function beatsAround(t) {
   while (beats[beats.length - 1] < t + 2) beats.push(beats[beats.length - 1] + 0.9 + 0.06 * sleepRand());
   return beats.filter(b => b > t - 1.5 && b < t + 1.5);
 }
+const extraTaps = [];
+/** For tests of the guided tap-sync: 6 taps with uneven gaps on both sensors, starting in 1 s. */
+export function tapBurst() {
+  const t = nowS() + 1;
+  [0, 1.3, 2.4, 4.1, 5.0, 6.8].forEach(d => extraTaps.push(t + d));
+}
 function tapAccel(t) {
+  for (const s of extraTaps) {
+    const p = t - s;
+    if (p >= 0 && p < 0.03) return 2.5 * Math.exp(-p / 0.01);
+  }
   // 6 taps, 0.8 s apart, starting 10 s in and every 25 s after that.
   const k = (t - 10) % 25;
   if (t < 10 || k < 0 || k > 5) return 0;
@@ -146,7 +156,7 @@ function startGsp(id, s, ref, path) {
       }
     }, 20));
   } else if (path === '/Meas/HR') {
-    let lastBeat = 0;
+    let lastBeat = nowS(); // only beats from now on (a real sensor doesn't replay the past after a reconnect)
     s.timers.set(ref, setInterval(() => {
       const t = nowS(), recent = beats.filter(b => b > lastBeat && b <= t);
       if (recent.length === 0) return;

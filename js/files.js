@@ -44,6 +44,20 @@ export async function writeStaged(subfolder) {
   return `${folder.name}/${subfolder}`;
 }
 
+/** The browser's own description (for the log). */
+export function userAgent() {
+  return navigator.userAgent;
+}
+
+/** Downloads a text file (the log). */
+export function downloadText(name, text) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+}
+
 /** Downloads one staged file (the zip) and forgets it. */
 export function downloadStaged(name) {
   const bytes = staged.get(name);

@@ -95,7 +95,7 @@ code { font: 13px ui-monospace, Consolas, monospace; background: #eef0f3; paddin
 .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
 .fields label { display: flex; flex-direction: column; font-size: 12px; color: var(--muted); gap: 2px; }
 .fields .wide { grid-column: 1 / -1; }
-.fields input { font: inherit; color: var(--ink); padding: 5px 8px; border: 1px solid var(--line-strong); border-radius: 6px; }
+.fields input { font: inherit; color: var(--ink); padding: 5px 8px; border: 1px solid var(--line-strong); border-radius: 6px; min-width: 0; width: 100%; }
 .hint { margin: 0; color: var(--muted); font-size: 12px; }
 .warn { margin: 0; color: #92400e; font-weight: 600; }
 .ok { margin: 0; color: #166534; font-weight: 600; }
@@ -108,6 +108,54 @@ code { font: 13px ui-monospace, Consolas, monospace; background: #eef0f3; paddin
     border: 1px solid var(--line);
     border-radius: 8px;
 }
+.check { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.small { font-size: 12px; }
+.btn.small { padding: 2px 8px; font-size: 12px; }
+.sub.bad { color: var(--error); font-weight: 600; }
+.rates { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.rates .big { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+#tacho {
+    display: block;
+    width: 100%;
+    height: 90px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+}
+.key.rr { color: #16a34a; }
+.key.ppi { color: #1d4ed8; margin-left: 8px; }
+.recover {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+    padding: 10px 12px;
+    background: #fffbeb;
+    border: 1px solid #fcd34d;
+    border-radius: 8px;
+}
+.recover .note { display: block; }
+.tapprompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 16px;
+    background: #fef3c7;
+    border: 2px solid #f59e0b;
+    border-radius: 10px;
+    text-align: center;
+    /* stays in view while the page is scrolled (on a phone the cards are long) */
+    position: sticky;
+    top: 8px;
+    z-index: 50;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+.tapprompt .big { font-size: 28px; font-weight: 800; letter-spacing: 0.02em; color: #92400e; font-variant-numeric: tabular-nums; }
+.tapprompt.now { background: #dcfce7; border-color: #16a34a; }
+.tapprompt.now .big { font-size: 40px; color: #166534; }
+.logbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
 .log summary { cursor: pointer; color: var(--muted); font-size: 13px; }
 .log pre {
     margin: 6px 0 0;
@@ -219,6 +267,27 @@ code { font: 13px ui-monospace, Consolas, monospace; background: #eef0f3; paddin
     .gaplist { height: 300px; min-height: 0; }
     #plot { height: 70vh; min-height: 380px; }
 }
+
+/* ---------- install / update notice (js/pwa.js) ---------- */
+.pwa-bar {
+    position: fixed;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100vw - 32px);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    padding: 10px 14px;
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    z-index: 900;
+}
+.pwa-bar[hidden] { display: none; }
 
 /* ---------- Blazor's own ---------- */
 #blazor-error-ui {
