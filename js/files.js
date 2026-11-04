@@ -1,5 +1,6 @@
 // Saving a finished recording from the browser's memory: into a folder the user picks (File System Access API, Chrome
-// and Edge on desktops) or as a downloaded zip. .NET stages each file's bytes here first (Interop/FilesInterop.cs).
+// and Edge on desktops), through the share sheet (iPhone: Bluefy has no downloads) or as a downloaded zip. .NET stages
+// each file's bytes here first (Interop/FilesInterop.cs).
 
 const staged = new Map(); // name -> Uint8Array
 let folder = null;        // the picked FileSystemDirectoryHandle, reused for later saves
@@ -56,6 +57,79 @@ export function downloadText(name, text) {
   a.download = name;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 60000);
+}
+
+// ---- The share sheet (iPhone and iPad: Save to Files, AirDrop, Mail) ----
+// A page can only open the share sheet from a tap. .NET packs the zip inside the click handler and opens the sheet
+// at once; if the browser decides the tap has expired by then ('needs-tap'), the zip stays staged and the next tap
+// on the button (data-share-file="<name>") opens the sheet from this listener, before .NET sees the click.
+
+const mimeOf = name => name.endsWith('.zip') ? 'application/zip' : name.endsWith('.txt') ? 'text/plain' : 'application/octet-stream';
+let shareRun = null; // { name, promise, taken }: the share a tap started
+
+/** True when the browser can hand a zip to the share sheet. */
+export function canShareFiles() {
+  try {
+    return typeof navigator.share === 'function' && typeof navigator.canShare === 'function' &&
+      navigator.canShare({ files: [new File([new Uint8Array(1)], 'test.zip', { type: 'application/zip' })] });
+  } catch {
+    return false;
+  }
+}
+
+export function stageText(name, text) {
+  staged.set(name, new TextEncoder().encode(text));
+}
+
+export function isStaged(name) {
+  return staged.has(name);
+}
+
+export function dropStaged(name) {
+  staged.delete(name);
+}
+
+function startShare(name, fromTap) {
+  const file = new File([staged.get(name)], name, { type: mimeOf(name) });
+  const run = { name, taken: false, promise: null };
+  run.promise = (async () => {
+    try {
+      await navigator.share({ files: [file], title: name });
+      return 'shared';
+    } catch (e) {
+      if (e?.name === 'AbortError') return 'cancelled';
+      if (e?.name === 'NotAllowedError' && !fromTap) return 'needs-tap';
+      return `failed: ${e?.name ?? 'Error'}: ${e?.message ?? e}`;
+    }
+  })();
+  shareRun = run;
+  return run;
+}
+
+document.addEventListener('click', e => {
+  const name = e.target?.closest?.('[data-share-file]')?.dataset.shareFile;
+  if (name && staged.has(name)) startShare(name, true);
+}, true);
+
+/** True when this click already opened the share sheet for the staged file (from the listener above). */
+export function shareStarted(name) {
+  return shareRun?.name === name && !shareRun.taken;
+}
+
+/** The outcome of the share the listener started: 'shared', 'cancelled' or 'failed: ...'. */
+export function takeShare() {
+  const run = shareRun;
+  if (!run || run.taken) return Promise.resolve('failed: no share was started');
+  run.taken = true;
+  return run.promise;
+}
+
+/** Opens the share sheet for a staged file now (call it inside a click handler); 'needs-tap' when the tap expired. */
+export function shareStaged(name) {
+  if (!staged.has(name)) return Promise.resolve(`failed: nothing staged as ${name}`);
+  const run = startShare(name, false);
+  run.taken = true;
+  return run.promise;
 }
 
 /** Downloads one staged file (the zip) and forgets it. */

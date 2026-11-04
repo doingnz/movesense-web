@@ -1,5 +1,5 @@
 self.assetsManifest = {
-  "version": "s8o9cz+A",
+  "version": "6hZNcn4D",
   "assets": [
     {
       "hash": "sha256-bQbwSOhzgzcUK/XFbZRcRuZ5hAXmdsWxS897RE9Hy70=",
@@ -58,12 +58,12 @@ self.assetsManifest = {
       "url": "_framework/Microsoft.JSInterop.WebAssembly.5ql0ra5mpq.wasm"
     },
     {
-      "hash": "sha256-AtpK/6h0pysC0SQB3WFnhw4OTHuSPgLsR1bvgz4egWc=",
-      "url": "_framework/MovesenseGsp.Core.aeomls5505.wasm"
+      "hash": "sha256-qqe89iAWN3dRChQHs4xRshCju/2zfOjfUn6QEQ4PMjM=",
+      "url": "_framework/MovesenseGsp.Core.ianfsy2kf4.wasm"
     },
     {
-      "hash": "sha256-cIkDOFMPdlnbQDJcct7GKAjlReT0ueJgcjjbivmvNHs=",
-      "url": "_framework/MovesenseGsp.Web.o62a9hwbn9.wasm"
+      "hash": "sha256-KEsdJ55eM2ozH4HR6SrVnMIosaiSz4wN8Stf7qeSquc=",
+      "url": "_framework/MovesenseGsp.Web.4h8dr5b4ox.wasm"
     },
     {
       "hash": "sha256-yCImBS6lW7Ykpr2LaKAHlIuD+c6YGW/ZDbYbDCbwE4U=",
@@ -198,11 +198,11 @@ self.assetsManifest = {
       "url": "_framework/dotnet.runtime.5nc8i5dl74.js"
     },
     {
-      "hash": "sha256-kL6n/6VSFxwTcaFTFA0OOwvv3391+ZqA80Su2guu/gM=",
-      "url": "_framework/dotnet.wssnxfnke1.js"
+      "hash": "sha256-APF+othU/zwYxHC8+qiYM/Hi/dVW4kfXmNvWyRN+u2Y=",
+      "url": "_framework/dotnet.sx0dr8heti.js"
     },
     {
-      "hash": "sha256-OajZZo/RNN1tvCAepF2P+gXMxrSMOi4skdNqNoer7So=",
+      "hash": "sha256-4xW/JWbuLtBXyyO8lOCAuntl2J1zly4dVN4f6JNagNo=",
       "url": "css/app.css"
     },
     {
@@ -218,7 +218,7 @@ self.assetsManifest = {
       "url": "icon-maskable-512.png"
     },
     {
-      "hash": "sha256-OAI9BZcTGpRVIjMCWSDRfuQ32tmLkia00viEOuOtoxs=",
+      "hash": "sha256-njCvzXsLPBld2/OjlD9rMBnAuUDcd9APaANMoOO8fkI=",
       "url": "index.html"
     },
     {
@@ -226,7 +226,7 @@ self.assetsManifest = {
       "url": "js/ble.js"
     },
     {
-      "hash": "sha256-AEk0w9f7fm9PSRscqHNhpQ4YFafcGIHoaVX3D44ZFRQ=",
+      "hash": "sha256-1ixjjUv1pq2NWsdcjMcHaAEqRVU5P1/JRYaY3BojfcQ=",
       "url": "js/files.js"
     },
     {

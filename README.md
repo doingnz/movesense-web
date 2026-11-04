@@ -1,6 +1,6 @@
 # Movesense GSP web app
 
-The built site of the MovesenseGsp web app, version 0.3.0: record a Movesense MD and a Polar band (Verity Sense or
+The built site of the MovesenseGsp web app, version 0.3.1: record a Movesense MD and a Polar band (Verity Sense or
 Polar 360) over Web Bluetooth, with live beat analysis and guided tap-sync, and view MovesenseGsp recordings (a folder
 or a zip of one) with every stream on one time axis and its gaps. It can be installed as an app.
 

@@ -136,6 +136,7 @@ code { font: 13px ui-monospace, Consolas, monospace; background: #eef0f3; paddin
     border-radius: 8px;
 }
 .recover .note { display: block; }
+.recover.kept { background: var(--paper); border-color: var(--line-strong); }
 .tapprompt {
     display: flex;
     flex-direction: column;
