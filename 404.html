@@ -10,7 +10,7 @@
     <meta name="theme-color" content="#1d4ed8" />
     <!-- The deploy step rewrites this for a sub-path such as /movesense-web/ (GitHub Pages). -->
     <base href="/movesense-web/" />
-    <link href="_framework/dotnet.sx0dr8heti.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-APF+othU/zwYxHC8+qiYM/Hi/dVW4kfXmNvWyRN+u2Y=" />
+    <link href="_framework/dotnet.8vttqdf917.js" rel="preload" as="script" fetchpriority="high" crossorigin="anonymous" integrity="sha256-dBoJlUeWdOolpU05m/tgszaxEu9OU+0hx9j/+RLpw3s=" />
     <link rel="icon" type="image/png" href="icon-192.png" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
@@ -18,20 +18,20 @@
     <script type="importmap">{
   "imports": {
     "./_framework/blazor.webassembly.js": "./_framework/blazor.webassembly.w3qd1tpl0e.js",
+    "./_framework/dotnet.js": "./_framework/dotnet.8vttqdf917.js",
     "./_framework/dotnet.native.js": "./_framework/dotnet.native.bjoj0wmylw.js",
-    "./_framework/dotnet.runtime.js": "./_framework/dotnet.runtime.5nc8i5dl74.js",
-    "./_framework/dotnet.js": "./_framework/dotnet.sx0dr8heti.js"
+    "./_framework/dotnet.runtime.js": "./_framework/dotnet.runtime.5nc8i5dl74.js"
   },
   "scopes": {},
   "integrity": {
     "./_framework/blazor.webassembly.js": "sha256-lDXsDYFgm62F+YUvxES7IOTCXYpiHpU3uR45YdC6mq4=",
     "./_framework/blazor.webassembly.w3qd1tpl0e.js": "sha256-lDXsDYFgm62F+YUvxES7IOTCXYpiHpU3uR45YdC6mq4=",
-    "./_framework/dotnet.js": "sha256-APF+othU/zwYxHC8+qiYM/Hi/dVW4kfXmNvWyRN+u2Y=",
+    "./_framework/dotnet.8vttqdf917.js": "sha256-dBoJlUeWdOolpU05m/tgszaxEu9OU+0hx9j/+RLpw3s=",
+    "./_framework/dotnet.js": "sha256-dBoJlUeWdOolpU05m/tgszaxEu9OU+0hx9j/+RLpw3s=",
     "./_framework/dotnet.native.bjoj0wmylw.js": "sha256-CZ0IVZkLTIvee7n1yVvOitlJWNdj/YjaFgpMgliIM64=",
     "./_framework/dotnet.native.js": "sha256-CZ0IVZkLTIvee7n1yVvOitlJWNdj/YjaFgpMgliIM64=",
     "./_framework/dotnet.runtime.5nc8i5dl74.js": "sha256-/3dBg9sj1yLD3h0PDMHnNUXWs/2zWwIMEzom1Xz3Q40=",
-    "./_framework/dotnet.runtime.js": "sha256-/3dBg9sj1yLD3h0PDMHnNUXWs/2zWwIMEzom1Xz3Q40=",
-    "./_framework/dotnet.sx0dr8heti.js": "sha256-APF+othU/zwYxHC8+qiYM/Hi/dVW4kfXmNvWyRN+u2Y="
+    "./_framework/dotnet.runtime.js": "sha256-/3dBg9sj1yLD3h0PDMHnNUXWs/2zWwIMEzom1Xz3Q40="
   }
 }</script>
 </head>
@@ -50,7 +50,87 @@
         <a href="." class="reload">Reload</a>
         <span class="dismiss">🗙</span>
     </div>
-    <script src="_framework/blazor.webassembly.w3qd1tpl0e.js"></script>
+    <script>
+        // Before Blazor (web 0.3.2). A browser that cannot run the app (an iPhone or iPad before iOS 16.4, for example an
+        // iPad mini 4 on iPadOS 15) cannot read Blazor's script or start the .NET runtime, which used to leave the loading
+        // circle at 0 with no message. Check what they need and say so instead. Plain ES5, so that any browser reads it.
+        (function () {
+            var missing = [];
+            function wasm(bytes) { try { return WebAssembly.validate(new Uint8Array(bytes)); } catch (e) { return false; } }
+            if (typeof WebAssembly !== 'object') missing.push('WebAssembly');
+            else {
+                // A function returning i8x16.popcnt(i8x16.splat(0)), and one with try / catch_all (as wasm-feature-detect).
+                if (!wasm([0, 97, 115, 109, 1, 0, 0, 0, 1, 5, 1, 96, 0, 1, 123, 3, 2, 1, 0, 10, 10, 1, 8, 0, 65, 0, 253, 15, 253, 98, 11]))
+                    missing.push('WebAssembly SIMD');
+                if (!wasm([0, 97, 115, 109, 1, 0, 0, 0, 1, 4, 1, 96, 0, 0, 3, 2, 1, 0, 10, 8, 1, 6, 0, 6, 64, 25, 11, 11]))
+                    missing.push('WebAssembly exception handling');
+            }
+            try { new Function('class A { static { } }'); } catch (e) { missing.push('JavaScript class static blocks'); }
+            if (window.HTMLScriptElement && HTMLScriptElement.supports && !HTMLScriptElement.supports('importmap'))
+                missing.push('import maps');
+            window.mgspMissing = missing;
+
+            // A message in place of the loading circle (replace) or under it (the start may still finish). Blazor's
+            // first render replaces everything in #app, so a message never stays over a running app.
+            function message(replace, title, text, detail) {
+                var app = document.getElementById('app');
+                if (!app || !app.querySelector('.loading-progress')) return; // the app has started: leave it
+                if (replace) app.innerHTML = '';
+                var box = document.createElement('div');
+                box.className = replace ? 'unsupported' : 'unsupported under-circle';
+                box.setAttribute('role', 'alert');
+                var h = document.createElement('h1'); h.textContent = title; box.appendChild(h);
+                var p = document.createElement('p'); p.textContent = text; box.appendChild(p);
+                var d = document.createElement('p'); d.className = 'detail'; d.textContent = detail; box.appendChild(d);
+                app.appendChild(box);
+            }
+            window.mgspStop = function (title, text, detail) { message(true, title, text, detail); };
+            window.mgspNote = function (title, text, detail) { message(false, title, text, detail); };
+            window.mgspLastError = '';
+            function remember(e) { if (!window.mgspLastError) window.mgspLastError = String(e && e.message || e); }
+            window.addEventListener('error', function (e) { remember(e.error || e.message); });
+            window.addEventListener('unhandledrejection', function (e) { remember(e.reason); });
+            if (missing.length)
+                mgspStop('This browser is too old for Movesense GSP',
+                    'On an iPhone or iPad the app needs iOS or iPadOS 16.4 or later, in the Bluefy app. On a computer or an ' +
+                    'Android phone, use a current Chrome or Edge.',
+                    'Missing: ' + missing.join(', ') + '. Browser: ' + navigator.userAgent);
+        })();
+    </script>
+    <script src="_framework/blazor.webassembly.w3qd1tpl0e.js" autostart="false"></script>
+    <script>
+        if (!window.mgspMissing.length) {
+            if (!window.Blazor)
+                mgspStop('The app did not load', 'Its files did not arrive. Check the connection, then reload the page.',
+                    'Browser: ' + navigator.userAgent);
+            else {
+                Blazor.start().catch(function (e) {
+                    mgspStop('The app could not start', 'Reload the page. If it happens again, send a screenshot of this.',
+                        String(e && e.message || e) + '. Browser: ' + navigator.userAgent);
+                });
+                // When a file never arrives or the runtime stops, Blazor.start() does not fail: the circle just stops.
+                // After 45 s with no progress, say so under the circle (a slow but working start then still finishes).
+                (function () {
+                    var last = null, since = Date.now();
+                    var timer = setInterval(function () {
+                        var app = document.getElementById('app');
+                        if (!app || !app.querySelector('.loading-progress') || app.querySelector('.unsupported')) {
+                            clearInterval(timer); return;
+                        }
+                        var p = getComputedStyle(document.documentElement).getPropertyValue('--blazor-load-percentage').trim();
+                        if (p !== last) { last = p; since = Date.now(); return; }
+                        if (Date.now() - since < 45000) return;
+                        clearInterval(timer);
+                        mgspNote('The app has not started yet',
+                            'Loading has not moved for 45 seconds. Check the connection, then reload the page. If it ' +
+                            'happens again, send a screenshot of this.',
+                            'Loaded ' + (p ? Math.floor(parseFloat(p)) + '%' : 'nothing') +
+                            (mgspLastError ? '. Error: ' + mgspLastError : '') + '. Browser: ' + navigator.userAgent);
+                    }, 1000);
+                })();
+            }
+        }
+    </script>
     <script src="js/pwa.js"></script>
 </body>
 

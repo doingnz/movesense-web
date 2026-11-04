@@ -1,4 +1,4 @@
-/* Manifest version: 6hZNcn4D */
+/* Manifest version: IurAHBdU */
 // The published site's service worker (Blazor's PWA template, adapted): it keeps a copy of every file of this version
 // so the installed app starts without a network, and serves index.html for the app's pages (/, /view).
 // A new version installs in the background and waits; the page (js/pwa.js) offers to reload into it, so a version is

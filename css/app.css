@@ -332,3 +332,17 @@ code { font: 13px ui-monospace, Consolas, monospace; background: #eef0f3; paddin
     inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
 }
 .loading-progress-text:after { content: var(--blazor-load-percentage-text, "Loading"); }
+
+/* index.html, in place of the loading circle: this browser cannot run the app, or the app did not start. */
+.unsupported {
+    width: calc(100% - 32px);
+    max-width: 34rem;
+    margin: 15vh auto 0;
+    padding: 18px 20px;
+    background: var(--paper);
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+}
+.unsupported.under-circle { position: absolute; inset: calc(20vh + 9.5rem) 0 auto 0; margin: 0 auto; }
+.unsupported p { margin: 8px 0 0; }
+.unsupported .detail { color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }

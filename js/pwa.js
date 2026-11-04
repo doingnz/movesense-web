@@ -1,7 +1,7 @@
 // Installing the web app (Chrome and Edge offer it once the page has a manifest and a service worker) and moving to a
 // new version. Plain script, outside Blazor: the notices are fixed to the bottom of the window.
 (() => {
-  if (!('serviceWorker' in navigator)) return;
+  if (!('serviceWorker' in navigator) || window.mgspMissing?.length) return; // index.html: the app cannot run here
 
   let installEvent = null;
   const bar = document.createElement('div');
